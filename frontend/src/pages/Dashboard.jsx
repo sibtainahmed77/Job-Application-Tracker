@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const Dashboard = ({ token, setToken }) => {
+const Dashboard = ({ token }) => {
   const [applications, setApplications] = useState([]);
-  const [error, setError] = useState("");
-  const [form, setForm] = useState({
-    company: "",
-    title: "",
-    jobType: "Full-time",
-    location: "",
-    salary: "",
-    notes: "",
-  });
+  const navigate = useNavigate();
 
   const fetchApplications = async () => {
     try {
-      if (!token) return;
       const res = await axios.get("http://localhost:5000/api/applications", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setApplications(res.data);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch applications");
+      console.error("Error fetching data", err);
     }
   };
 
@@ -29,144 +21,87 @@ const Dashboard = ({ token, setToken }) => {
     fetchApplications();
   }, [token]);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:5000/api/applications", form, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setForm({ 
-        company: "", 
-        title: "", 
-        jobType: "Full-time", 
-        location: "", 
-        salary: "", 
-        notes: "" 
-      });
-      setError("");
-      fetchApplications();
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to create application");
+  const deleteApp = async (id) => {
+    if (window.confirm("Are you sure you want to remove this application?")) {
+      try {
+        await axios.delete(`http://localhost:5000/api/applications/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        fetchApplications();
+      } catch (err) {
+        console.error("Error deleting application", err);
+      }
     }
   };
 
-  const handleLogout = () => {
-    setToken("");
-    localStorage.removeItem("token");
-  };
-
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h2>Job Tracker</h2>
-        <button className="btn-logout" onClick={handleLogout}>Logout</button>
-      </div>
+    <div className="app-container">
+      <header className="page-header">
+        <div>
+          <h2>Career Pipeline</h2>
+          <p style={{ color: "var(--text-muted)" }}>
+            Tracking <strong>{applications.length}</strong> active opportunities
+          </p>
+        </div>
+        <button className="primary-btn" onClick={() => navigate("/add-application")}>
+          + New Application
+        </button>
+      </header>
 
-      <div className="card" style={{ maxWidth: '100%', marginBottom: '2rem' }}>
-        <h3>Add New Application</h3>
-        {error && <div className="error-msg" style={{marginBottom: '1rem'}}>{error}</div>}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-grid">
-            <input
-              name="company"
-              placeholder="Company Name"
-              value={form.company}
-              onChange={handleChange}
-              required
-            />
-            <input
-              name="title"
-              placeholder="Job Title"
-              value={form.title}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-grid">
-            <select name="jobType" value={form.jobType} onChange={handleChange}>
-              <option value="Full-time">Full-time</option>
-              <option value="Part-time">Part-time</option>
-              <option value="Internship">Internship</option>
-              <option value="Remote">Remote</option>
-            </select>
-            <input
-              name="location"
-              placeholder="Location"
-              value={form.location}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-grid">
-            <input
-              name="salary"
-              placeholder="Salary (e.g. 60k)"
-              value={form.salary}
-              onChange={handleChange}
-            />
-            <input
-              name="notes"
-              placeholder="Notes / Status"
-              value={form.notes}
-              onChange={handleChange}
-            />
-          </div>
-
-          <button type="submit" style={{marginTop: '0.5rem'}}>Add Application</button>
-        </form>
-      </div>
-
-      <h3>Application History</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Location</th>
-            <th>Salary</th>
-            <th>Status</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {applications.length === 0 ? (
+      <div className="table-wrapper glass-card">
+        <table className="modern-table">
+          <thead>
             <tr>
-              <td colSpan="7" style={{textAlign: 'center', color: '#9ca3af'}}>
-                No applications found. Add one above!
-              </td>
+              <th>Company</th>
+              <th>Position</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th className="text-right">Actions</th>
             </tr>
-          ) : (
-            applications.map((app) => (
-              <tr key={app._id}>
-                <td>{app.company}</td>
-                <td>{app.title}</td>
-                <td>{app.jobType}</td>
-                <td>{app.location}</td>
-                <td>{app.salary || '-'}</td>
-                <td>
-                  <span style={{
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    backgroundColor: app.status === 'Applied' ? '#3b82f6' : '#10b981',
-                    fontSize: '0.85rem'
-                  }}>
-                    {app.status}
-                  </span>
+          </thead>
+          <tbody>
+            {applications.length > 0 ? (
+              applications.map((app) => (
+                <tr key={app._id}>
+                  <td><div className="company-cell">{app.company}</div></td>
+                  <td><div className="title-cell">{app.title}</div></td>
+                  <td><span className="type-tag">{app.jobType}</span></td>
+                  <td>
+                    <span className={`status-pill ${app.status.toLowerCase()}`}>
+                      {app.status}
+                    </span>
+                  </td>
+                  <td className="text-right">
+                    <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+                      <button 
+                        className="btn-outline" 
+                        onClick={() => navigate(`/edit-application/${app._id}`)}
+                        style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}
+                      >
+                        Edit
+                      </button>
+                      
+                      <button 
+                        className="btn-delete" 
+                        onClick={() => deleteApp(app._id)}
+                        title="Delete"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center", padding: "2rem", color: "var(--text-muted)" }}>
+                  No applications found. Start your journey today!
                 </td>
-                <td>{new Date(app.createdAt).toLocaleDateString()}</td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
