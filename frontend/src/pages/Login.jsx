@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../index.css";
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
@@ -10,7 +9,7 @@ const Login = ({ setToken }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
         email,
         password,
       });
@@ -22,24 +21,26 @@ const Login = ({ setToken }) => {
   };
 
   return (
-    <div className="container">
-      <h2>Login</h2>
+    <div className="card">
+      <h2>Welcome Back</h2>
+      {error && <div className="error-msg">{error}</div>}
       <form onSubmit={handleSubmit}>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <button type="submit">Login</button>
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
