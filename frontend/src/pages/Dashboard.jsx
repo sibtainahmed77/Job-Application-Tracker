@@ -26,7 +26,7 @@ const Dashboard = ({ token, setToken }) => {
   };
 
   useEffect(() => {
-    fetchApplications();
+    if (token) fetchApplications();
   }, [token]);
 
   const handleChange = (e) => {
@@ -39,14 +39,7 @@ const Dashboard = ({ token, setToken }) => {
       await axios.post("http://localhost:5000/api/applications", form, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setForm({
-        company: "",
-        title: "",
-        jobType: "",
-        location: "",
-        salary: "",
-        notes: "",
-      });
+      setForm({ company: "", title: "", jobType: "", location: "", salary: "", notes: "" });
       setError("");
       fetchApplications();
     } catch (err) {
@@ -57,8 +50,9 @@ const Dashboard = ({ token, setToken }) => {
   return (
     <div className="container">
       <h2>Dashboard</h2>
-
-      <button onClick={() => setToken("")}>Logout</button>
+      <button onClick={() => setToken("")} style={{ float: "right", marginBottom: "10px" }}>
+        Logout
+      </button>
 
       <h3>Add New Application</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -71,7 +65,6 @@ const Dashboard = ({ token, setToken }) => {
           onChange={handleChange}
           required
         />
-
         <input
           name="title"
           placeholder="Job Title"
@@ -79,20 +72,13 @@ const Dashboard = ({ token, setToken }) => {
           onChange={handleChange}
           required
         />
-
-        <select
+        <input
           name="jobType"
+          placeholder="Job Type"
           value={form.jobType}
           onChange={handleChange}
           required
-        >
-          <option value="">Select Job Type</option>
-          <option value="Full-time">Full-time</option>
-          <option value="Part-time">Part-time</option>
-          <option value="Internship">Internship</option>
-          <option value="Remote">Remote</option>
-        </select>
-
+        />
         <input
           name="location"
           placeholder="Location"
@@ -100,14 +86,12 @@ const Dashboard = ({ token, setToken }) => {
           onChange={handleChange}
           required
         />
-
         <input
           name="salary"
           placeholder="Salary"
           value={form.salary}
           onChange={handleChange}
         />
-
         <input
           name="notes"
           placeholder="Notes"
@@ -119,7 +103,6 @@ const Dashboard = ({ token, setToken }) => {
       </form>
 
       <h3>Applications List</h3>
-
       <table>
         <thead>
           <tr>
