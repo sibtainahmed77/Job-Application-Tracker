@@ -23,7 +23,6 @@ const Stats = ({ token }) => {
 
   const getCount = (status) => apps.filter(app => app.status === status).length;
 
-  // Calculate Success Rate (Offers / Total Apps)
   const successRate = apps.length > 0 
     ? ((getCount("Offer") / apps.length) * 100).toFixed(1) 
     : 0;
@@ -40,13 +39,11 @@ const Stats = ({ token }) => {
       </header>
 
       <div className="stats-grid">
-        {/* Total Card */}
         <div className="card stats-card">
           <h4>Total Applications</h4>
           <div className="stat-value">{apps.length}</div>
         </div>
 
-        {/* Success Rate Card */}
         <div className="card stats-card">
           <h4>Success Rate</h4>
           <div className="stat-value" style={{ color: "var(--success-color)" }}>{successRate}%</div>
@@ -54,7 +51,6 @@ const Stats = ({ token }) => {
       </div>
 
       <div className="stats-grid" style={{ marginTop: "1.5rem" }}>
-        {/* Interview Card */}
         <div className="card stats-card">
           <h4>Interviews</h4>
           <div className="stat-value" style={{ color: "var(--interview-color)" }}>
@@ -62,7 +58,6 @@ const Stats = ({ token }) => {
           </div>
         </div>
 
-        {/* Offers Card */}
         <div className="card stats-card">
           <h4>Offers Received</h4>
           <div className="stat-value" style={{ color: "var(--success-color)" }}>
@@ -70,7 +65,6 @@ const Stats = ({ token }) => {
           </div>
         </div>
 
-        {/* Rejected Card */}
         <div className="card stats-card">
           <h4>Rejections</h4>
           <div className="stat-value" style={{ color: "var(--error-color)" }}>
@@ -79,7 +73,6 @@ const Stats = ({ token }) => {
         </div>
       </div>
 
-      {/* Motivation Tip */}
       <div className="card" style={{ marginTop: "2rem", textAlign: "center", borderStyle: "dashed" }}>
         <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>
           {apps.length === 0 
