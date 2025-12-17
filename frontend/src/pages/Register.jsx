@@ -13,9 +13,7 @@ const Register = () => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5000/api/auth/register", {
-        name,
-        email,
-        password,
+        name, email, password,
       });
       setIsSuccess(true); 
       setError("");
@@ -27,11 +25,14 @@ const Register = () => {
   if (isSuccess) {
     return (
       <div className="auth-wrapper">
-        <div className="auth-card" style={{ textAlign: "center" }}>
+        <div className="glass-card auth-card" style={{ textAlign: "center" }}>
+          <div style={{ fontSize: "3.5rem", marginBottom: "0.5rem" }}>✨</div>
           <h2 style={{ color: "var(--success-color)" }}>Success!</h2>
-          <p style={{ marginBottom: "1.5rem" }}>Your account has been created successfully.</p>
+          <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem" }}>
+            Your professional journey starts here.
+          </p>
           <Link to="/login">
-            <button>Go to Login</button>
+            <button className="primary-btn" style={{ width: "100%" }}>Login Now</button>
           </Link>
         </div>
       </div>
@@ -40,19 +41,46 @@ const Register = () => {
 
   return (
     <div className="auth-wrapper">
-      <div className="auth-card">
+      <div className="glass-card auth-card">
         <h2>Create Account</h2>
-        {error && <div className="error-msg">{error}</div>}
+        <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", textAlign: "center", fontSize: "0.9rem" }}>
+          Track your career growth today
+        </p>
         
-        <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} required />
-          <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button type="submit">Register</button>
+        {error && <div className="error-message" style={{ marginBottom: "1rem" }}>⚠️ {error}</div>}
+        
+        <form onSubmit={handleSubmit} style={{ gap: "1rem" }}>
+          <input 
+            type="text" 
+            placeholder="Full Name" 
+            className={error ? "error-input" : ""}
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            required 
+          />
+          <input 
+            type="email" 
+            placeholder="Email Address" 
+            className={error ? "error-input" : ""}
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            className={error ? "error-input" : ""}
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            required 
+          />
+          <button type="submit" className="primary-btn" style={{ marginTop: "0.5rem" }}>
+            Register
+          </button>
         </form>
 
-        <p style={{ marginTop: '1rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-          Already have an account? <Link to="/login" style={{ color: 'var(--primary-color)' }}>Login</Link>
+        <p style={{ marginTop: '1.5rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+          Already have an account? <Link to="/login" style={{ color: 'var(--primary-color)', fontWeight: '700', textDecoration: 'none' }}>Login</Link>
         </p>
       </div>
     </div>

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 const Dashboard = ({ token }) => {
   const [applications, setApplications] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("All");
   const navigate = useNavigate();
 
   const fetchApplications = async () => {
@@ -34,13 +36,21 @@ const Dashboard = ({ token }) => {
     }
   };
 
+  const filteredApplications = applications.filter((app) => {
+    const matchesSearch = 
+      app.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      app.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = filterStatus === "All" || app.status === filterStatus;
+    return matchesSearch && matchesStatus;
+  });
+
   return (
     <div className="app-container">
-      <header className="page-header">
+      <header className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h2>Career Pipeline</h2>
-          <p style={{ color: "var(--text-muted)" }}>
-            Tracking <strong>{applications.length}</strong> active opportunities
+          <p style={{ color: "var(--text-muted)", marginTop: "0.5rem" }}>
+            Tracking <strong>{filteredApplications.length}</strong> active opportunities
           </p>
         </div>
         <button className="primary-btn" onClick={() => navigate("/add-application")}>
@@ -48,43 +58,70 @@ const Dashboard = ({ token }) => {
         </button>
       </header>
 
-      <div className="table-wrapper glass-card">
-        <table className="modern-table">
+      {/* Filter Section - Breathable spacing */}
+      <div className="glass-card" style={{ marginBottom: "3rem", display: "flex", gap: "1.5rem", padding: "1.5rem" }}>
+        <input 
+          type="text"
+          placeholder="Search by company or position..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ flex: 3, margin: 0, background: 'rgba(0,0,0,0.2)' }}
+        />
+        <select 
+          value={filterStatus} 
+          onChange={(e) => setFilterStatus(e.target.value)}
+          style={{ flex: 1, margin: 0, background: 'rgba(0,0,0,0.2)' }}
+        >
+          <option value="All">All Statuses</option>
+          <option value="Applied">Applied</option>
+          <option value="Interview">Interview</option>
+          <option value="Offer">Offer</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+
+      {/* Applications List - De-congested */}
+      <div className="table-wrapper">
+        <table style={{ borderCollapse: 'separate', borderSpacing: '0 8px', width: '100%', background: 'transparent' }}>
           <thead>
             <tr>
               <th>Company</th>
               <th>Position</th>
               <th>Type</th>
               <th>Status</th>
-              <th className="text-right">Actions</th>
+              <th style={{ textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {applications.length > 0 ? (
-              applications.map((app) => (
-                <tr key={app._id}>
-                  <td><div className="company-cell">{app.company}</div></td>
-                  <td><div className="title-cell">{app.title}</div></td>
-                  <td><span className="type-tag">{app.jobType}</span></td>
+            {filteredApplications.length > 0 ? (
+              filteredApplications.map((app) => (
+                <tr key={app._id} className="table-row-hover">
+                  <td style={{ fontWeight: '700', color: '#fff' }}>{app.company}</td>
+                  <td style={{ color: 'var(--text-muted)' }}>{app.title}</td>
+                  <td>
+                    <span style={{ fontSize: '0.75rem', opacity: 0.7, border: '1px solid var(--border-color)', padding: '2px 8px', borderRadius: '4px' }}>
+                      {app.jobType}
+                    </span>
+                  </td>
                   <td>
                     <span className={`status-pill ${app.status.toLowerCase()}`}>
                       {app.status}
                     </span>
                   </td>
-                  <td className="text-right">
-                    <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+                  <td style={{ textAlign: 'right' }}>
+                    <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
                       <button 
                         className="btn-outline" 
                         onClick={() => navigate(`/edit-application/${app._id}`)}
-                        style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}
+                        style={{ padding: "0.5rem 1rem", fontSize: "0.75rem" }}
                       >
                         Edit
                       </button>
-                      
                       <button 
-                        className="btn-delete" 
                         onClick={() => deleteApp(app._id)}
-                        title="Delete"
+                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.1rem', opacity: 0.6 }}
+                        onMouseOver={(e) => e.target.style.opacity = 1}
+                        onMouseOut={(e) => e.target.style.opacity = 0.6}
                       >
                         🗑️
                       </button>
@@ -94,8 +131,10 @@ const Dashboard = ({ token }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="5" style={{ textAlign: "center", padding: "2rem", color: "var(--text-muted)" }}>
-                  No applications found. Start your journey today!
+                <td colSpan="5" style={{ textAlign: "center", padding: "4rem", color: "var(--text-muted)" }}>
+                  {applications.length === 0 
+                    ? "No applications yet. Time to apply!" 
+                    : "No matches found for your search."}
                 </td>
               </tr>
             )}

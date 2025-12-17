@@ -8,8 +8,8 @@ const Navbar = ({ handleLogout }) => {
 
   return (
     <nav className="navbar">
-      <Link to="/dashboard" className="logo" style={{ textDecoration: 'none' }}>
-        Job<span style={{ color: "var(--text-color)" }}>Tracker</span>
+      <Link to="/dashboard" className="logo">
+        Job<span>Tracker</span>
       </Link>
 
       <ul className="nav-links">
@@ -25,17 +25,25 @@ const Navbar = ({ handleLogout }) => {
         </li>
         <li>
           <Link to="/add-application" className={isActive("/add-application")}>
-            Add New
+            New
           </Link>
         </li>
         <li>
-          <Link to="/stats" className={isActive("/stats")}>
-            Stats
+          <Link to="/insights" className={isActive("/insights")}>
+            Insights
+          </Link>
+        </li>
+        <li>
+          <Link to="/profile" className={isActive("/profile")}>
+            Profile
           </Link>
         </li>
       </ul>
 
-      <button onClick={handleLogout} className="btn-outline">
+      <button 
+        onClick={handleLogout} 
+        className="btn-logout-nav"
+      >
         Logout
       </button>
     </nav>
