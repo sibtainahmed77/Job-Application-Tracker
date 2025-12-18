@@ -29,7 +29,6 @@ const Login = ({ setToken }) => {
     <div className="auth-wrapper">
       <div className="glass-card auth-card" style={{ position: 'relative', overflow: 'hidden' }}>
         
-        {/* Verification Overlay */}
         {loading && (
           <div style={{
             position: 'absolute',

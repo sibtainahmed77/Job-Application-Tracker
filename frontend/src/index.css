@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Color System - Indigo & Deep Slate */
   --bg-color: #020617;
   --surface-color: #0f172a;
   --surface-glass: rgba(15, 23, 42, 0.6);
@@ -34,18 +33,17 @@ body {
 
 .app-container {
   width: 100%;
-  max-width: 1280px; /* Increased from 1100px for more horizontal room */
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 3rem 5rem 3rem; /* Increased padding */
+  padding: 0 3rem 5rem 3rem;
 }
 
-/* --- REFINED NAVBAR --- */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 2.5rem 0;
-  margin-bottom: 4rem; /* More space after nav */
+  margin-bottom: 4rem;
 }
 
 .logo {
@@ -81,13 +79,12 @@ body {
   color: var(--primary-color);
 }
 
-/* --- CARDS 2.0 (Spacious) --- */
 .glass-card {
   background: var(--surface-glass);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border-color);
   border-radius: 28px;
-  padding: 3rem; /* Increased padding inside cards */
+  padding: 3rem; 
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
@@ -105,17 +102,16 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* --- FORM GRID (De-congested) --- */
 form {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem; /* More space between form rows */
+  gap: 2.5rem; 
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem; /* Increased gap to stop items looking crowded */
+  gap: 2rem; 
 }
 
 .input-group {
@@ -152,7 +148,6 @@ input:focus {
   outline: none;
 }
 
-/* --- TABLES --- */
 .table-wrapper {
   background: var(--surface-glass);
   border-radius: 28px;
@@ -173,11 +168,10 @@ th {
 }
 
 td {
-  padding: 1.8rem 1.5rem; /* Taller rows for better readability */
+  padding: 1.8rem 1.5rem; 
   border-bottom: 1px solid var(--border-color);
 }
 
-/* --- STATUS PILLS --- */
 .status-pill {
   padding: 0.5rem 1rem;
   border-radius: 100px;
@@ -190,7 +184,6 @@ td {
 .offer { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
 .rejected { background: rgba(244, 63, 94, 0.1); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.2); }
 
-/* --- INSIGHTS --- */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -204,7 +197,6 @@ td {
   letter-spacing: -3px;
 }
 
-/* --- BUTTONS --- */
 button {
   border-radius: 14px;
   padding: 1rem 2rem;
@@ -345,4 +337,9 @@ button {
   transform: translateY(-2px);
   border-color: var(--primary-color) !important;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+select option {
+  background-color: #121212;
+  color: white;
 }

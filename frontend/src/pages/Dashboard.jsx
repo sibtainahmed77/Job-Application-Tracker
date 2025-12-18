@@ -58,7 +58,6 @@ const Dashboard = ({ token }) => {
         </button>
       </header>
 
-      {/* Filter Section - Breathable spacing */}
       <div className="glass-card" style={{ marginBottom: "3rem", display: "flex", gap: "1.5rem", padding: "1.5rem" }}>
         <input 
           type="text"
@@ -70,7 +69,16 @@ const Dashboard = ({ token }) => {
         <select 
           value={filterStatus} 
           onChange={(e) => setFilterStatus(e.target.value)}
-          style={{ flex: 1, margin: 0, background: 'rgba(0,0,0,0.2)' }}
+          style={{ 
+            flex: 1, 
+            margin: 0, 
+            background: 'rgba(255, 255, 255, 0.05)', 
+            color: 'white',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            colorScheme: 'dark', 
+            padding: '0.5rem',
+            cursor: 'pointer'
+          }}
         >
           <option value="All">All Statuses</option>
           <option value="Applied">Applied</option>
@@ -80,7 +88,6 @@ const Dashboard = ({ token }) => {
         </select>
       </div>
 
-      {/* Applications List - De-congested */}
       <div className="table-wrapper">
         <table style={{ borderCollapse: 'separate', borderSpacing: '0 8px', width: '100%', background: 'transparent' }}>
           <thead>

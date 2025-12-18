@@ -67,7 +67,6 @@ const Profile = ({ token }) => {
 
       <div className="form-grid" style={{ gridTemplateColumns: "1fr 1.5fr", alignItems: 'start' }}>
         
-        {/* Left Side: Identity Card - RESTORED & ENHANCED */}
         <div className="glass-card" style={{ textAlign: "center", padding: "3rem 2rem" }}>
           <div style={{ 
             width: "100px", height: "100px", borderRadius: "32px", 
@@ -112,10 +111,8 @@ const Profile = ({ token }) => {
           </div>
         </div>
 
-        {/* Right Side: Content */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           
-          {/* Tech Stack */}
           <div className="glass-card" style={{ padding: "1.5rem" }}>
             <h4 style={{ marginBottom: "1.2rem", fontSize: "0.8rem", color: "var(--primary-color)", textTransform: "uppercase", letterSpacing: '1px' }}>
               Technical Stack
@@ -129,7 +126,6 @@ const Profile = ({ token }) => {
             </div>
           </div>
 
-          {/* Compact Professional Assets */}
           <div className="glass-card" style={{ padding: "1.5rem" }}>
             <h4 style={{ marginBottom: "1.2rem", fontSize: "0.8rem", color: "var(--primary-color)", textTransform: "uppercase", letterSpacing: '1px' }}>
               Professional Assets
